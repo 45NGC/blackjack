@@ -46,10 +46,37 @@ const pedirCarta = () => {
 		throw 'NO HAY MAS CARTAS DENTRO DE LA BARAJA';
 	}
 	const carta = baraja.pop();
-	console.log(`Carta tomada : ${ carta }`)
+	console.log(`Carta tomada : ${ carta }`);
 	return carta;
 }
 
+const obtenerValorCarta = ( carta ) => {
+	// Funcion que nos devuelve el valor de la carta que le pasemos como parametro
+	// Las cartas numericas valen todas lo mismo que su numero, las no numericas valen todas 10 excepto el as que vale 11
+
+	// La razon por la cual seleccionamos el substring en lugar de pillar siempre el primer caracter del string
+	// es porque en caso de que la carta sea un 10 se quedaria con el valor de 1 en lugar de 10
+	const valor = carta.substring(0, carta.length - 1);
+
+	// Se puede hacer asi :
+
+	// if(isNaN( valor )){
+	// 	// No es un numero
+	// 	valor = (valor === 'A') ? 11 : 10;
+	// }else{
+	// 	// Es un numero
+	// 	valor = valor * 1;
+	// }
+
+	// Pero es mas recomendable hacerlo de la siguiente forma con un operador ternario:
+	return (isNaN( valor )) ? (valor === 'A') ? 11 : 10 : valor * 1;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 crearBaraja();
-pedirCarta();
+
+carta = pedirCarta();
+valorCarta = obtenerValorCarta(carta);
 console.log(`Baraja sin una carta : ${ baraja }`);
+console.log(`Valor de la carta ${ carta } : ${ valorCarta }`);
