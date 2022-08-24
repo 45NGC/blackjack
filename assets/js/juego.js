@@ -109,12 +109,15 @@ const turnoComputadora = ( puntosJugador ) => {
 			}else if( puntosComputadora > 21 ){
 				console.warn('HAS GANADO');
 				finalJuego = true;
+			}else if( puntosComputadora === puntosJugador){
+				console.log('EMPATE');
+				finalJuego = true;
 			}
 		}else if(puntosComputadora > 21){
 			console.warn('HAS GANADO');
 			finalJuego = true;
 		}else if(puntosComputadora === 21){
-			console.warn('NADIE HA GANADO');
+			console.warn('EMPATE');
 			finalJuego = true;
 		}
 	}
