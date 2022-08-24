@@ -13,11 +13,12 @@ let baraja = 			[],
 	puntosComputadora=	0;
 
 // Referencias al HTML
-const btnNuevo = document.querySelector('#btnNuevo');
-const btnPedir = document.querySelector('#btnPedir');
-const btnDetener = document.querySelector('#btnDetener');
+const btnNuevo = 		document.querySelector('#btnNuevo');
+const btnPedir = 		document.querySelector('#btnPedir');
+const btnDetener = 		document.querySelector('#btnDetener');
 
-const puntuaciones = document.querySelectorAll('small');
+const cartasJugador = 	document.querySelector('#jugador-cartas');
+const puntuaciones = 	document.querySelectorAll('small');
 
 
 const crearBaraja = () => {
@@ -83,9 +84,28 @@ const obtenerValorCarta = ( carta ) => {
 
 // Eventos
 btnPedir.addEventListener('click', () => {
+	// Pedimos una carta
 	const carta = pedirCarta();
+
+	// Mostramos la carta que acabamos de sacar y se la mostramos al jugador
+	const imgCarta = document.createElement('img');
+	imgCarta.src = `assets/cartas/${carta}.png`;
+	imgCarta.classList.add('carta');
+	cartasJugador.append(imgCarta);
+
+	// Añadimos los puntos de dicha carta a la puntuacion del jugador
 	puntosJugador += obtenerValorCarta(carta);
 	puntuaciones[0].innerText = puntosJugador;
+
+	// En caso de que el jugador se pase de 21 puntos le hacemos saber que ha perdido
+	// y le deshabilitamos el boton de pedir cartas
+	if (puntosJugador > 21){
+		console.warn('HAS PERDIDO');
+		btnPedir.disabled = true;
+	}else if (puntosJugador === 21){
+		console.warn('HAS GANADO');
+		btnPedir.disabled = true;
+	}
 });
 
 
