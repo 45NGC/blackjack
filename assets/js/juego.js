@@ -88,7 +88,7 @@ const obtenerValorCarta = ( carta ) => {
 
 const turnoComputadora = ( puntosJugador ) => {
 
-	while( finalJuego === false && puntosComputadora <= puntosJugador){
+	while( finalJuego === false && puntosComputadora < puntosJugador){
 		// Si el jugador se detiene y por lo tanto aun no se sabe si gano o perdio, la computadora 
 		// pedira cartas mientras su puntuacion sea inferior a la del jugador
 
@@ -102,11 +102,19 @@ const turnoComputadora = ( puntosJugador ) => {
 		puntosComputadora += obtenerValorCarta(carta);
 		puntuaciones[1].innerText = puntosComputadora;
 
-		if ( puntosJugador < puntosComputadora && puntosComputadora <= 21 ){
-			console.warn('HAS PERDIDO');
-			finalJuego = true;
-		}else if( puntosComputadora > 21 ){
+		if(puntosJugador != 21){
+			if ( puntosJugador < puntosComputadora && puntosComputadora <= 21 ){
+				console.warn('HAS PERDIDO');
+				finalJuego = true;
+			}else if( puntosComputadora > 21 ){
+				console.warn('HAS GANADO');
+				finalJuego = true;
+			}
+		}else if(puntosComputadora > 21){
 			console.warn('HAS GANADO');
+			finalJuego = true;
+		}else if(puntosComputadora === 21){
+			console.warn('NADIE HA GANADO');
 			finalJuego = true;
 		}
 	}
@@ -138,8 +146,8 @@ btnPedir.addEventListener('click', () => {
 		console.warn('HAS PERDIDO');
 		desactivarBotones();
 	}else if( puntosJugador === 21 ){
-		console.warn('HAS GANADO');
 		desactivarBotones();
+		turnoComputadora( puntosJugador );
 	}
 });
 
