@@ -5,11 +5,20 @@
  * 2H = dos de corazones
  * 2S = dos de espadas
  */
+ 
+let baraja = 			[],
+    palos = 			['C','D','H','S'], // CLUBS, DIAMONDS, HEARTS, SPADES
+	tiposNoNumericos = 	['J','Q','K','A'], // JACK (11), QUEEN (12), KING (13), ASE (1)
+	puntosJugador = 	0,
+	puntosComputadora=	0;
 
-let baraja = [];
+// Referencias al HTML
+const btnNuevo = document.querySelector('#btnNuevo');
+const btnPedir = document.querySelector('#btnPedir');
+const btnDetener = document.querySelector('#btnDetener');
 
-let palos = 			['C','D','H','S']; // CLUBS, DIAMONDS, HEARTS, SPADES
-let tiposNoNumericos = 	['J','Q','K','A']; // JACK (11), QUEEN (12), KING (13), ASE (1)
+const puntuaciones = document.querySelectorAll('small');
+
 
 const crearBaraja = () => {
 	// Esta funcion devuelve una baraja (en forma de array) totalmente desordenada
@@ -28,12 +37,12 @@ const crearBaraja = () => {
 		}
 	}
 
-	console.log(`Baraja ordenada : ${ baraja }`);
+	//console.log(`Baraja ordenada : ${ baraja }`);
 
 	// Barajamos nuestra baraja :
 	baraja = _.shuffle( baraja );
 
-	console.log(`Baraja desordenada : ${ baraja }`);
+	//console.log(`Baraja desordenada : ${ baraja }`);
 
 	return baraja;
 }
@@ -72,11 +81,14 @@ const obtenerValorCarta = ( carta ) => {
 	return (isNaN( valor )) ? (valor === 'A') ? 11 : 10 : valor * 1;
 }
 
+// Eventos
+btnPedir.addEventListener('click', () => {
+	const carta = pedirCarta();
+	puntosJugador += obtenerValorCarta(carta);
+	puntuaciones[0].innerText = puntosJugador;
+});
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 crearBaraja();
-
-carta = pedirCarta();
-valorCarta = obtenerValorCarta(carta);
-console.log(`Baraja sin una carta : ${ baraja }`);
-console.log(`Valor de la carta ${ carta } : ${ valorCarta }`);
