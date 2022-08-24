@@ -109,29 +109,13 @@ const turnoComputadora = ( puntosJugador ) => {
 			console.warn('HAS GANADO');
 			finalJuego = true;
 		}
-
-		// Comprobamos si el juego se ha terminado
-		if(finalJuego === false){
-			comprobarFinalJuego( false,puntosComputadora );
-		}
 	}
 
 }
 
-const comprobarFinalJuego = ( jugador,puntuacion ) => {
-	
-	if (puntuacion > 21){
-		jugador = true ? console.warn('HAS PERDIDO') : console.warn('HAS GANADO');
-		btnPedir.disabled = true;
-		btnDetener.disabled = true;
-		finalJuego = true;
-	}else if (puntuacion === 21){
-		jugador = true ? console.warn('HAS GANADO') : console.warn('HAS PERDIDO');
-		btnPedir.disabled = true;
-		btnDetener.disabled = true;
-		finalJuego = true;
-	}
-
+const desactivarBotones = () => {
+	btnPedir.disabled = true;
+	btnDetener.disabled = true;
 }
 // Eventos
 
@@ -149,14 +133,18 @@ btnPedir.addEventListener('click', () => {
 	puntosJugador += obtenerValorCarta(carta);
 	puntuaciones[0].innerText = puntosJugador;
 
-	// Comprobamos si el juego se ha terminado
-	comprobarFinalJuego( true,puntosJugador );
+	// Comprobamos si hemos perdido
+	if( puntosJugador > 21 ){
+		console.warn('HAS PERDIDO');
+		desactivarBotones();
+	}else if( puntosJugador === 21 ){
+		console.warn('HAS GANADO');
+		desactivarBotones();
+	}
 });
 
 btnDetener.addEventListener('click', () => {
-	btnPedir.disabled = true;
-	btnDetener.disabled = true;
-
+	desactivarBotones();
 	turnoComputadora( puntosJugador );
 });
 
