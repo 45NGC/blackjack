@@ -10,15 +10,17 @@ let baraja = 			[],
     palos = 			['C','D','H','S'], // CLUBS, DIAMONDS, HEARTS, SPADES
 	tiposNoNumericos = 	['J','Q','K','A'], // JACK (11), QUEEN (12), KING (13), ASE (1)
 	puntosJugador = 	0,
-	puntosComputadora=	0;
+	puntosComputadora =	0,
+	finalJuego =	 	false;
 
 // Referencias al HTML
-const btnNuevo = 		document.querySelector('#btnNuevo');
-const btnPedir = 		document.querySelector('#btnPedir');
-const btnDetener = 		document.querySelector('#btnDetener');
+const btnNuevo = 			document.querySelector('#btnNuevo');
+const btnPedir = 			document.querySelector('#btnPedir');
+const btnDetener = 			document.querySelector('#btnDetener');
 
-const cartasJugador = 	document.querySelector('#jugador-cartas');
-const puntuaciones = 	document.querySelectorAll('small');
+const cartasJugador = 		document.querySelector('#jugador-cartas');
+const cartasComputadora = 	document.querySelector('#computadora-cartas');
+const puntuaciones = 		document.querySelectorAll('small');
 
 
 const crearBaraja = () => {
@@ -82,7 +84,57 @@ const obtenerValorCarta = ( carta ) => {
 	return (isNaN( valor )) ? (valor === 'A') ? 11 : 10 : valor * 1;
 }
 
+// Computadora
+
+const turnoComputadora = ( puntosJugador ) => {
+
+	while( finalJuego === false && puntosComputadora <= puntosJugador){
+		// Si el jugador se detiene y por lo tanto aun no se sabe si gano o perdio, la computadora 
+		// pedira cartas mientras su puntuacion sea inferior a la del jugador
+
+		const carta = pedirCarta();
+
+		const imgCarta = document.createElement('img');
+		imgCarta.src = `assets/cartas/${carta}.png`;
+		imgCarta.classList.add('carta');
+		cartasComputadora.append(imgCarta);
+
+		puntosComputadora += obtenerValorCarta(carta);
+		puntuaciones[1].innerText = puntosComputadora;
+
+		if ( puntosJugador < puntosComputadora && puntosComputadora <= 21 ){
+			console.warn('HAS PERDIDO');
+			finalJuego = true;
+		}else if( puntosComputadora > 21 ){
+			console.warn('HAS GANADO');
+			finalJuego = true;
+		}
+
+		// Comprobamos si el juego se ha terminado
+		if(finalJuego === false){
+			comprobarFinalJuego( false,puntosComputadora );
+		}
+	}
+
+}
+
+const comprobarFinalJuego = ( jugador,puntuacion ) => {
+	
+	if (puntuacion > 21){
+		jugador = true ? console.warn('HAS PERDIDO') : console.warn('HAS GANADO');
+		btnPedir.disabled = true;
+		btnDetener.disabled = true;
+		finalJuego = true;
+	}else if (puntuacion === 21){
+		jugador = true ? console.warn('HAS GANADO') : console.warn('HAS PERDIDO');
+		btnPedir.disabled = true;
+		btnDetener.disabled = true;
+		finalJuego = true;
+	}
+
+}
 // Eventos
+
 btnPedir.addEventListener('click', () => {
 	// Pedimos una carta
 	const carta = pedirCarta();
@@ -97,15 +149,15 @@ btnPedir.addEventListener('click', () => {
 	puntosJugador += obtenerValorCarta(carta);
 	puntuaciones[0].innerText = puntosJugador;
 
-	// En caso de que el jugador se pase de 21 puntos le hacemos saber que ha perdido
-	// y le deshabilitamos el boton de pedir cartas
-	if (puntosJugador > 21){
-		console.warn('HAS PERDIDO');
-		btnPedir.disabled = true;
-	}else if (puntosJugador === 21){
-		console.warn('HAS GANADO');
-		btnPedir.disabled = true;
-	}
+	// Comprobamos si el juego se ha terminado
+	comprobarFinalJuego( true,puntosJugador );
+});
+
+btnDetener.addEventListener('click', () => {
+	btnPedir.disabled = true;
+	btnDetener.disabled = true;
+
+	turnoComputadora( puntosJugador );
 });
 
 
