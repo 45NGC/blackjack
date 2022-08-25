@@ -14,6 +14,7 @@ let baraja = 			[],
 	finalJuego =	 	false;
 
 // Referencias al HTML
+
 const btnNuevo = 			document.querySelector('#btnNuevo');
 const btnPedir = 			document.querySelector('#btnPedir');
 const btnDetener = 			document.querySelector('#btnDetener');
@@ -157,6 +158,27 @@ btnPedir.addEventListener('click', () => {
 btnDetener.addEventListener('click', () => {
 	desactivarBotones();
 	turnoComputadora( puntosJugador );
+});
+
+btnNuevo.addEventListener('click', () => {
+	// Habilitamos los botones de pedir y detener
+	btnDetener.disabled = 		false;
+	btnPedir.disabled = 		false;
+	// Reseteamos los puntos de ambas partes a 0
+	puntosJugador = 			0;
+	puntosComputadora = 		0;
+	puntuaciones[0].innerText = puntosJugador;
+	puntuaciones[1].innerText = puntosComputadora;
+	// Reseteamos las cartas de ambas partes
+	cartasJugador.innerHTML = '';
+	cartasComputadora.innerHTML = '';
+
+	// Creamos un nuevo deck
+	baraja = [];
+	crearBaraja();
+	//console.log(baraja);
+
+	finalJuego = false;
 });
 
 
