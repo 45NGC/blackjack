@@ -161,6 +161,8 @@ btnDetener.addEventListener('click', () => {
 });
 
 btnNuevo.addEventListener('click', () => {
+	// Limpiamos los logs de la consola
+	console.clear();
 	// Habilitamos los botones de pedir y detener
 	btnDetener.disabled = 		false;
 	btnPedir.disabled = 		false;
