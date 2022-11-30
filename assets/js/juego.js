@@ -12,27 +12,50 @@
 	 * 2H = dos de corazones
 	 * 2S = dos de espadas
 	 */
-	
+	const palos = 			['C','D','H','S'], // CLUBS, DIAMONDS, HEARTS, SPADES
+	tiposNoNumericos = 		['J','Q','K','A']; // JACK (11), QUEEN (12), KING (13), ASE (1)
+
 	let baraja = 			[],
-	palos = 				['C','D','H','S'], // CLUBS, DIAMONDS, HEARTS, SPADES
-	tiposNoNumericos = 		['J','Q','K','A'], // JACK (11), QUEEN (12), KING (13), ASE (1)
 	puntosJugador = 		0,
 	puntosComputadora =		0,
 	finalJuego =	 		false;
 
 	// Referencias al HTML
 
-	const btnNuevo = 			document.querySelector('#btnNuevo');
-	const btnPedir = 			document.querySelector('#btnPedir');
-	const btnDetener = 			document.querySelector('#btnDetener');
+	const btnNuevo = 			document.querySelector('#btnNuevo'),
+	btnPedir = 					document.querySelector('#btnPedir'),
+	btnDetener = 				document.querySelector('#btnDetener');
 
-	const cartasJugador = 		document.querySelector('#jugador-cartas');
-	const cartasComputadora = 	document.querySelector('#computadora-cartas');
-	const puntuaciones = 		document.querySelectorAll('small');
+	const cartasJugador = 		document.querySelector('#jugador-cartas'),
+	cartasComputadora = 		document.querySelector('#computadora-cartas'),
+	puntuaciones = 				document.querySelectorAll('small');
 
+
+
+	const iniciarPartida = () => {
+		// Limpiamos los logs de la consola
+		console.clear();
+		// Habilitamos los botones de pedir y detener
+		btnDetener.disabled = 		false;
+		btnPedir.disabled = 		false;
+		// Reseteamos los puntos de ambas partes a 0
+		puntosJugador = 			0;
+		puntosComputadora = 		0;
+		puntuaciones[0].innerText = puntosJugador;
+		puntuaciones[1].innerText = puntosComputadora;
+		// Reseteamos las cartas de ambas partes
+		cartasJugador.innerHTML = '';
+		cartasComputadora.innerHTML = '';
+
+		finalJuego = false;
+
+		// Reseteamos la baraja
+		baraja = crearBaraja();
+	}
 
 	const crearBaraja = () => {
 		// Esta funcion devuelve una baraja (en forma de array) totalmente desordenada
+		baraja = [];
 
 		// Añadimos las cartas numericas de la baraja (del 2 al 10)
 		for(let i = 2 ; i <= 10; i++) {
@@ -48,14 +71,8 @@
 			}
 		}
 
-		//console.log(`Baraja ordenada : ${ baraja }`);
-
-		// Barajamos nuestra baraja :
-		baraja = _.shuffle( baraja );
-
-		//console.log(`Baraja desordenada : ${ baraja }`);
-
-		return baraja;
+		// Devolvemos la baraja mezclada :
+		return _.shuffle( baraja );
 	}
 
 	const pedirCarta = () => {
@@ -65,9 +82,8 @@
 		if(baraja.length === 0){
 			throw 'NO HAY MAS CARTAS DENTRO DE LA BARAJA';
 		}
-		const carta = baraja.pop();
-		console.log(`Carta tomada : ${ carta }`);
-		return carta;
+		
+		return baraja.pop();
 	}
 
 	const obtenerValorCarta = ( carta ) => {
@@ -96,39 +112,39 @@
 
 	const turnoComputadora = ( puntosJugador ) => {
 
-	while( finalJuego === false && puntosComputadora < puntosJugador){
-		// Si el jugador se detiene y por lo tanto aun no se sabe si gano o perdio, la computadora 
-		// pedira cartas mientras su puntuacion sea inferior a la del jugador
+		while( finalJuego === false && puntosComputadora < puntosJugador){
+			// Si el jugador se detiene y por lo tanto aun no se sabe si gano o perdio, la computadora 
+			// pedira cartas mientras su puntuacion sea inferior a la del jugador
 
-		const carta = pedirCarta();
+			const carta = pedirCarta();
 
-		const imgCarta = document.createElement('img');
-		imgCarta.src = `assets/cartas/${carta}.png`;
-		imgCarta.classList.add('carta');
-		cartasComputadora.append(imgCarta);
+			const imgCarta = document.createElement('img');
+			imgCarta.src = `assets/cartas/${carta}.png`;
+			imgCarta.classList.add('carta');
+			cartasComputadora.append(imgCarta);
 
-		puntosComputadora += obtenerValorCarta(carta);
-		puntuaciones[1].innerText = puntosComputadora;
+			puntosComputadora += obtenerValorCarta(carta);
+			puntuaciones[1].innerText = puntosComputadora;
 
-		if(puntosJugador != 21){
-			if ( puntosJugador < puntosComputadora && puntosComputadora <= 21 ){
-				console.warn('HAS PERDIDO');
-				finalJuego = true;
-			}else if( puntosComputadora > 21 ){
+			if(puntosJugador != 21){
+				if ( puntosJugador < puntosComputadora && puntosComputadora <= 21 ){
+					console.warn('HAS PERDIDO');
+					finalJuego = true;
+				}else if( puntosComputadora > 21 ){
+					console.warn('HAS GANADO');
+					finalJuego = true;
+				}else if( puntosComputadora === puntosJugador){
+					console.log('EMPATE');
+					finalJuego = true;
+				}
+			}else if(puntosComputadora > 21){
 				console.warn('HAS GANADO');
 				finalJuego = true;
-			}else if( puntosComputadora === puntosJugador){
-				console.log('EMPATE');
+			}else if(puntosComputadora === 21){
+				console.warn('EMPATE');
 				finalJuego = true;
 			}
-		}else if(puntosComputadora > 21){
-			console.warn('HAS GANADO');
-			finalJuego = true;
-		}else if(puntosComputadora === 21){
-			console.warn('EMPATE');
-			finalJuego = true;
 		}
-	}
 
 	}
 
@@ -168,28 +184,8 @@
 	});
 
 	btnNuevo.addEventListener('click', () => {
-		// Limpiamos los logs de la consola
-		console.clear();
-		// Habilitamos los botones de pedir y detener
-		btnDetener.disabled = 		false;
-		btnPedir.disabled = 		false;
-		// Reseteamos los puntos de ambas partes a 0
-		puntosJugador = 			0;
-		puntosComputadora = 		0;
-		puntuaciones[0].innerText = puntosJugador;
-		puntuaciones[1].innerText = puntosComputadora;
-		// Reseteamos las cartas de ambas partes
-		cartasJugador.innerHTML = '';
-		cartasComputadora.innerHTML = '';
-
-		// Creamos un nuevo deck
-		baraja = [];
-		crearBaraja();
-		//console.log(baraja);
-
-		finalJuego = false;
+		//Iniciamos una nueva partida
+		iniciarPartida();
 	});
-
-	crearBaraja();
 
 })();
