@@ -112,7 +112,7 @@
 
 	const turnoComputadora = ( puntosJugador ) => {
 
-		while( finalJuego === false && puntosComputadora < puntosJugador){
+		while( finalJuego === false && puntosComputadora <= puntosJugador){
 			// Si el jugador se detiene y por lo tanto aun no se sabe si gano o perdio, la computadora 
 			// pedira cartas siempre que se cumplan las siguientes condiciones :
 			// - Mientras su puntuacion sea inferior a la del jugador.
