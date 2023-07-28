@@ -114,7 +114,11 @@
 
 		while( finalJuego === false && puntosComputadora < puntosJugador){
 			// Si el jugador se detiene y por lo tanto aun no se sabe si gano o perdio, la computadora 
-			// pedira cartas mientras su puntuacion sea inferior a la del jugador
+			// pedira cartas siempre que se cumplan las siguientes condiciones :
+			// - Mientras su puntuacion sea inferior a la del jugador.
+			// - Mientras su puntuacion sea inferior o igual a 17, por ejemplo si el jugador tiene 18 puntos y la 
+			//   computadora obtiene 18 puntos esta se detendra y optara por el empate, ya que seguir pidiendo cartas
+			//   resultaria en una derrota por lo general.
 
 			const carta = pedirCarta();
 
@@ -133,8 +137,8 @@
 				}else if( puntosComputadora > 21 ){
 					console.warn('HAS GANADO');
 					finalJuego = true;
-				}else if( puntosComputadora === puntosJugador){
-					console.log('EMPATE');
+				}else if( puntosComputadora === puntosJugador && puntosComputadora >= 17){
+					console.warn('EMPATE');
 					finalJuego = true;
 				}
 			}else if(puntosComputadora > 21){
@@ -188,4 +192,6 @@
 		iniciarPartida();
 	});
 
+	// Hacemos una llamada a 'iniciarPartida' para que no se pidan cartas antes de que se cree la baraja
+	iniciarPartida();
 })();
